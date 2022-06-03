@@ -6,11 +6,15 @@ import (
 )
 
 func main() {
-	fmt.Println("hello world")
 
 	i := cryptographer.Cryptographer{
-		Curve: cryptographer.SECP256k1(),
+		Scheme: cryptographer.SECP256k1(),
 	}
 
-	i.Encrypt()
+	num := i.GeneratePrivateKey().Key
+	addr := &num
+
+	fmt.Print(addr.String())
+	pair := i.GenerateKeyPair()
+	fmt.Println(pair)
 }

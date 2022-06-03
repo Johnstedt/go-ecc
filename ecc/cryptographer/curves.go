@@ -4,11 +4,16 @@ import (
 	"math/big"
 )
 
+type Scheme struct {
+	curve     Curve
+	prime     big.Int
+	basePoint Point
+	order     big.Int // #E,
+}
+
 type Curve struct {
-	a        big.Int
-	b        big.Int
-	p        big.Int
-	BasePont Point
+	a big.Int
+	b big.Int
 }
 
 type Point struct {
@@ -16,7 +21,11 @@ type Point struct {
 	y big.Int
 }
 
-func SECP256k1() Curve {
+func (p Point) equals(q Point) bool {
+	return p.y.Cmp(&q.y) == 0 && p.x.Cmp(&q.x) == 0
+}
+
+func SECP256k1() Scheme {
 	a := new(big.Int)
 	a.SetString("0", 16)
 
@@ -26,25 +35,31 @@ func SECP256k1() Curve {
 	p := new(big.Int)
 	p.SetString("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F", 16)
 
+	o := new(big.Int)
+	o.SetString("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16)
+
 	bx := new(big.Int)
 	bx.SetString("79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16)
 
 	by := new(big.Int)
 	by.SetString("483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16)
 
-	curve := Curve{
-		a: *a,
-		b: *b,
-		p: *p,
-		BasePont: Point{
+	scheme := Scheme{
+		curve: Curve{
+			a: *a,
+			b: *b,
+		},
+		prime: *p,
+		order: *o,
+		basePoint: Point{
 			x: *bx,
 			y: *by,
 		},
 	}
-	return curve
+	return scheme
 }
 
-func SECP521k1() Curve {
+func SECP521r1() Scheme {
 	a := new(big.Int)
 	a.SetString("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC", 16)
 
@@ -54,20 +69,26 @@ func SECP521k1() Curve {
 	p := new(big.Int)
 	p.SetString("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16)
 
+	o := new(big.Int)
+	o.SetString("01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA51868783BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409", 16)
+
 	bx := new(big.Int)
 	bx.SetString("00C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66", 16)
 
 	by := new(big.Int)
 	by.SetString("011839296A789A3BC0045C8A5FB42C7D1BD998F54449579B446817AFBD17273E662C97EE72995EF42640C550B9013FAD0761353C7086A272C24088BE94769FD16650", 16)
 
-	curve := Curve{
-		a: *a,
-		b: *b,
-		p: *p,
-		BasePont: Point{
+	scheme := Scheme{
+		curve: Curve{
+			a: *a,
+			b: *b,
+		},
+		prime: *p,
+		order: *o,
+		basePoint: Point{
 			x: *bx,
 			y: *by,
 		},
 	}
-	return curve
+	return scheme
 }

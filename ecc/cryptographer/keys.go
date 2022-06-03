@@ -1,17 +1,15 @@
 package cryptographer
 
-import "math/big"
-
-type Key struct {
-	Key big.Int
-}
+import (
+	"math/big"
+)
 
 type PublicKey struct {
-	Key Key
+	Point Point
 }
 
 type PrivateKey struct {
-	Key Key
+	Key big.Int
 }
 
 type KeyPair struct {
