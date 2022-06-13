@@ -16,3 +16,8 @@ type KeyPair struct {
 	PublicKey  PublicKey
 	PrivateKey PrivateKey
 }
+
+type Signature struct {
+	R big.Int
+	S big.Int
+}

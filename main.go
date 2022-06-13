@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"go-ecc/ecc/cryptographer"
 )
 
@@ -11,10 +10,7 @@ func main() {
 		Scheme: cryptographer.SECP256k1(),
 	}
 
-	num := i.GeneratePrivateKey().Key
-	addr := &num
-
-	fmt.Print(addr.String())
 	pair := i.GenerateKeyPair()
-	fmt.Println(pair)
+	sig := i.Sign(pair.PrivateKey, "the message")
+	i.Verify(pair.PublicKey, sig, "the message")
 }
